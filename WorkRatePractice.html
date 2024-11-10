@@ -161,7 +161,7 @@
         let possibleGroups = [['1', '2', '3', '4', '5'],
         ['a', 'b', 'c', 'd', 'e'],
         ['℉', '℃', '⁂', 'Č', 'Ć'],
-        ['↖', '↗', '↘', '↙', '←', '→', '↑', '↑', '↓']]
+        ['↖', '↗', '↘', '↙', '←', '→', '↑', '↓']]
 
         let correctAnswer = -1;
 
@@ -246,12 +246,13 @@
                 for (let i = 0; i < 3; i++) {
                     // Check if correct
                     if (i < numCorrect) {
-                        choiceText += columns[keyCols[i]][(keyRow + rowShift[i]) % 3]
+                        choiceText += columns[keyCols[i]][(keyRow + rowShift[i] + 3) % 3]
                     } else {
                         colShift = 1 + randomInts(2, 1)[0] // RANDOM 1,2,3
-                        choiceText += columns[(keyCols[i] + colShift) % 4][(keyRow + rowShift[i]) % 3]
+                        choiceText += columns[(keyCols[i] + colShift + 4) % 4][(keyRow + rowShift[i] + 3) % 3]
                     }
                 }
+
                 return choiceText
             }
             return [generateChoice(3), generateChoice(2), generateChoice(2), generateChoice(1), generateChoice(0)]
@@ -283,7 +284,6 @@
 
                 row_pos = index % 3
                 col_pos = Math.floor(index / 3)
-                console.log("index: " + index + ", symbol: " + columns[col_pos][row_pos])
                 grid.textContent = columns[col_pos][row_pos]
             });
 
@@ -300,9 +300,9 @@
             // Function
             // [Correct, Two Correct, Two Correct, One Correct, None Correct]
             let generatedChoices = generateMultipleChoices(columns, key_row, key_col)
-
+            console.log(generatedChoices)
             // Generate Scamble Map random order of number 0 to 4
-            let scambleMap = [1, 2, 0, 4, 3] // RANDOM
+            let scambleMap = randomDistinctInts(4, 5) // RANDOM
             // Scamble
             let scambleChoices = [generatedChoices[scambleMap[0]],
             generatedChoices[scambleMap[1]],
@@ -310,6 +310,8 @@
             generatedChoices[scambleMap[3]],
             generatedChoices[scambleMap[4]]]
             correctAnswer = scambleMap.indexOf(0) // Find index of 0
+
+            console.log(scambleChoices)
 
             // Get all elements with the class "choice"
             const btnChoices = document.querySelectorAll(".choice");
