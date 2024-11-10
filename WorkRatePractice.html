@@ -175,6 +175,7 @@
             correctAnswers = 0;
             startTimer();
             showScreen('test-screen');
+            updateAndGenerateQuestion();
             updateQuestionCounter();
         }
 
@@ -273,6 +274,52 @@
             return columns
         }
 
+        function updateAndGenerateQuestion() {
+            // Update Grid
+            let columns = generateColumns()
+
+            // Simulate changing icons for the next question
+            document.querySelectorAll('.icon-grid').forEach((grid, index) => {
+
+                row_pos = index % 3
+                col_pos = Math.floor(index / 3)
+                console.log("index: " + index + ", symbol: " + columns[col_pos][row_pos])
+                grid.textContent = columns[col_pos][row_pos]
+            });
+
+            // Generate Key
+            // Function
+            key_row = randomInts(2, 1)[0] // RANDOM 0, 1, 2
+            key_col = randomDistinctInts(3, 3)// RANDOM 3 distint random numbers from 0,1,2,3 
+
+            // Update Alternative Code Text
+            key_icons = columns[key_col[0]][key_row] + columns[key_col[1]][key_row] + columns[key_col[2]][key_row]
+            document.getElementById("alternative-code").textContent = "WHICH COULD BE AN ALTERNATIVE CODE FOR " + key_icons;
+
+            // Update choices
+            // Function
+            // [Correct, Two Correct, Two Correct, One Correct, None Correct]
+            let generatedChoices = generateMultipleChoices(columns, key_row, key_col)
+
+            // Generate Scamble Map random order of number 0 to 4
+            let scambleMap = [1, 2, 0, 4, 3] // RANDOM
+            // Scamble
+            let scambleChoices = [generatedChoices[scambleMap[0]],
+            generatedChoices[scambleMap[1]],
+            generatedChoices[scambleMap[2]],
+            generatedChoices[scambleMap[3]],
+            generatedChoices[scambleMap[4]]]
+            correctAnswer = scambleMap.indexOf(0) // Find index of 0
+
+            // Get all elements with the class "choice"
+            const btnChoices = document.querySelectorAll(".choice");
+            // Loop through each choice element
+            btnChoices.forEach((choice, index) => {
+                // Change the text content of each choice element
+                choice.textContent = scambleChoices[index];
+            });
+        }
+
         function nextQuestion() {
             if (selectedChoice === -1) return alert("Please select an answer");
 
@@ -288,50 +335,7 @@
                 clearInterval(timer);
                 showResults();
             } else {
-                // Update Grid
-                let columns = generateColumns()
-
-                // Simulate changing icons for the next question
-                document.querySelectorAll('.icon-grid').forEach((grid, index) => {
-
-                    row_pos = index % 3
-                    col_pos = Math.floor(index / 3)
-                    console.log("index: " + index + ", symbol: " + columns[col_pos][row_pos])
-                    grid.textContent = columns[col_pos][row_pos]
-                });
-
-                // Generate Key
-                // Function
-                key_row = randomInts(2, 1)[0] // RANDOM 0, 1, 2
-                key_col = randomDistinctInts(3, 3)// RANDOM 3 distint random numbers from 0,1,2,3 
-
-                // Update Alternative Code Text
-                key_icons = columns[key_col[0]][key_row] + columns[key_col[1]][key_row] + columns[key_col[2]][key_row]
-                document.getElementById("alternative-code").textContent = "WHICH COULD BE AN ALTERNATIVE CODE FOR " + key_icons;
-
-                // Update choices
-                // Function
-                // [Correct, Two Correct, Two Correct, One Correct, None Correct]
-                let generatedChoices = generateMultipleChoices(columns, key_row, key_col)
-
-                // Generate Scamble Map random order of number 0 to 4
-                let scambleMap = [1, 2, 0, 4, 3] // RANDOM
-                // Scamble
-                let scambleChoices = [generatedChoices[scambleMap[0]],
-                generatedChoices[scambleMap[1]],
-                generatedChoices[scambleMap[2]],
-                generatedChoices[scambleMap[3]],
-                generatedChoices[scambleMap[4]]]
-                correctAnswer = scambleMap.indexOf(0) // Find index of 0
-
-                // Get all elements with the class "choice"
-                const btnChoices = document.querySelectorAll(".choice");
-                // Loop through each choice element
-                btnChoices.forEach((choice, index) => {
-                    // Change the text content of each choice element
-                    choice.textContent = scambleChoices[index];
-                });
-
+                updateAndGenerateQuestion();
                 updateQuestionCounter();
             }
         }
