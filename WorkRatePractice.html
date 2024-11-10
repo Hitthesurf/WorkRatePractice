@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DAA Work Rate Practice</title>
     <style>
-        body, html {
+        body,
+        html {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -13,38 +15,50 @@
             font-family: Arial, sans-serif;
             margin: 0;
         }
+
         .screen {
             display: none;
             text-align: center;
             width: 100%;
             max-width: 1000px;
         }
+
         .active {
             display: block;
         }
-        #timer, #question-counter {
+
+        #timer,
+        #question-counter {
             position: absolute;
             top: 10px;
         }
+
         #timer {
             left: 10px;
         }
+
         #question-counter {
             right: 10px;
         }
-        .table, .choices {
+
+        .table,
+        .choices {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin: 20px 0;
-flex-wrap: wrap; /* Allows items to flow within container width */
-width: 100%;
+            flex-wrap: wrap;
+            /* Allows items to flow within container width */
+            width: 100%;
         }
-        .table div, .choices div {
+
+        .table div,
+        .choices div {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
+
         .icon-grid {
             width: 60px;
             height: 60px;
@@ -54,21 +68,24 @@ width: 100%;
             align-items: center;
             font-size: 30px;
         }
- .choice {
-     padding: 20px;
-     border: 2px solid #000;
-     cursor: pointer;
-     font-size: 18px;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     width: 120px;
-     height: 80px;
- }
+
+        .choice {
+            padding: 20px;
+            border: 2px solid #000;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 80px;
+        }
+
         .choice.selected {
             background-color: #00f;
             color: #fff;
         }
+
         #next-button {
             position: absolute;
             bottom: 20px;
@@ -79,6 +96,7 @@ width: 100%;
         }
     </style>
 </head>
+
 <body>
 
     <!-- Start Screen -->
@@ -93,10 +111,26 @@ width: 100%;
         <div id="question-counter">Question 1 of 20</div>
         <div class="table">
             <!-- 4x3 Grid Table for Icons -->
-            <div><div class="icon-grid">⬛</div><div class="icon-grid">⚪</div><div class="icon-grid">⬜</div></div>
-            <div><div class="icon-grid">🚗</div><div class="icon-grid">✈️</div><div class="icon-grid">🚛</div></div>
-            <div><div class="icon-grid">⚠️</div><div class="icon-grid">🛑</div><div class="icon-grid">⬤</div></div>
-            <div><div class="icon-grid">🔲</div><div class="icon-grid">◼️</div><div class="icon-grid">■</div></div>
+            <div>
+                <div class="icon-grid">⬛</div>
+                <div class="icon-grid">⚪</div>
+                <div class="icon-grid">⬜</div>
+            </div>
+            <div>
+                <div class="icon-grid">🚗</div>
+                <div class="icon-grid">✈️</div>
+                <div class="icon-grid">🚛</div>
+            </div>
+            <div>
+                <div class="icon-grid">⚠️</div>
+                <div class="icon-grid">🛑</div>
+                <div class="icon-grid">⬤</div>
+            </div>
+            <div>
+                <div class="icon-grid">🔲</div>
+                <div class="icon-grid">◼️</div>
+                <div class="icon-grid">■</div>
+            </div>
         </div>
         <p>WHICH COULD BE AN ALTERNATIVE CODE FOR Icon1 Icon2 Icon3</p>
         <div class="choices">
@@ -199,4 +233,5 @@ width: 100%;
         }
     </script>
 </body>
+
 </html>
