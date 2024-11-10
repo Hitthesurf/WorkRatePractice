@@ -162,11 +162,11 @@
         ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
         ['℉', '℃', '⁂', 'Č', 'Ć'],
         ['↖', '↗', '↘', '↙', '←', '→', '↑', '↓'],
-        ['▲','△','◀','◁','▶','▷','▽','▼'],
+        ['▲', '△', '◀', '◁', '▶', '▷', '▽', '▼'],
         ['⇐', '⇒', '⇑', '⇓', '⇔', '⇕', '⇖', '⇗', '⇘', '⇙'],
-        ['◓','◐','◑','◒'],
-        ['🚗','🚚','🏍','✈','🚢'],
-        ['α','β','ε','λ','γ','μ','ζ','π','ξ','Ψ','φ']]
+        ['◓', '◐', '◑', '◒'],
+        ['🚗', '🚚', '🏍', '✈', '🚢'],
+        ['α', 'β', 'ε', 'λ', 'γ', 'μ', 'ζ', 'π', 'ξ', 'Ψ', 'φ']]
 
         let correctAnswer = -1;
 
@@ -213,6 +213,28 @@
             selectedChoice = choiceIndex;
         }
 
+        function generateBinaryArrayWithSum(targetSum) {
+            // Check that x is within the allowed range
+            if (targetSum < 0 || targetSum > 3) {
+                throw new Error("targetSum must be between 0 and 3");
+            }
+
+            // Start with an array of three zeros
+            let array = [0, 0, 0];
+
+            // Randomly set `targetSum` positions in the array to 1
+            let positions = [];
+            while (positions.length < targetSum) {
+                let pos = Math.floor(Math.random() * 3);
+                if (!positions.includes(pos)) {
+                    positions.push(pos);
+                    array[pos] = 1;
+                }
+            }
+
+            return array;
+        }
+
         function randomInts(maxValue, number) {
             let result = [];
             for (let i = 0; i < number; i++) {
@@ -248,9 +270,10 @@
             function generateChoice(numCorrect) {
                 let choiceText = ""
                 let rowShift = randomArrayFromMinusPlusOneSet(3)// RANDOM +-1 3 times
+                let isCorrect = generateBinaryArrayWithSum(numCorrect) // RANDOM
                 for (let i = 0; i < 3; i++) {
-                    // Check if correct
-                    if (i < numCorrect) {
+                    
+                    if (isCorrect[i] == 1) {
                         choiceText += columns[keyCols[i]][(keyRow + rowShift[i] + 3) % 3]
                     } else {
                         colShift = 1 + randomInts(2, 1)[0] // RANDOM 1,2,3
@@ -260,7 +283,7 @@
 
                 return choiceText
             }
-            return [generateChoice(3), generateChoice(2), generateChoice(2), generateChoice(1), generateChoice(0)]
+            return [generateChoice(3), generateChoice(2), generateChoice(2), generateChoice(2), generateChoice(1)]
         }
 
         function generateColumns() {
