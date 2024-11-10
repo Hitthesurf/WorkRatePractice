@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAA Work Rate Practice</title>
+    <style>
+        body, html {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .screen {
+            display: none;
+            text-align: center;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .active {
+            display: block;
+        }
+        #timer, #question-counter {
+            position: absolute;
+            top: 10px;
+        }
+        #timer {
+            left: 10px;
+        }
+        #question-counter {
+            right: 10px;
+        }
+        .table, .choices {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+flex-wrap: wrap; /* Allows items to flow within container width */
+width: 100%;
+        }
+        .table div, .choices div {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .icon-grid {
+            width: 60px;
+            height: 60px;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+        }
+ .choice {
+     padding: 20px;
+     border: 2px solid #000;
+     cursor: pointer;
+     font-size: 18px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 120px;
+     height: 80px;
+ }
+        .choice.selected {
+            background-color: #00f;
+            color: #fff;
+        }
+        #next-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen active">
+        <h1>DAA Work Rate Practice</h1>
+        <button onclick="startTest()" style="padding: 15px 30px; font-size: 18px;">Start</button>
+    </div>
+
+    <!-- Test Screen -->
+    <div id="test-screen" class="screen">
+        <div id="timer">4:00</div>
+        <div id="question-counter">Question 1 of 20</div>
+        <div class="table">
+            <!-- 4x3 Grid Table for Icons -->
+            <div><div class="icon-grid">⬛</div><div class="icon-grid">⚪</div><div class="icon-grid">⬜</div></div>
+            <div><div class="icon-grid">🚗</div><div class="icon-grid">✈️</div><div class="icon-grid">🚛</div></div>
+            <div><div class="icon-grid">⚠️</div><div class="icon-grid">🛑</div><div class="icon-grid">⬤</div></div>
+            <div><div class="icon-grid">🔲</div><div class="icon-grid">◼️</div><div class="icon-grid">■</div></div>
+        </div>
+        <p>WHICH COULD BE AN ALTERNATIVE CODE FOR Icon1 Icon2 Icon3</p>
+        <div class="choices">
+            <!-- Choices with Placeholder Icons -->
+            <div class="choice" onclick="selectChoice(0)">⚪ ◼️ ⚠️</div>
+            <div class="choice" onclick="selectChoice(1)">🚗 🛑 ◼️</div>
+            <div class="choice" onclick="selectChoice(2)">✈️ ⚪ 🚛</div>
+            <div class="choice" onclick="selectChoice(3)">⬤ 🚗 🛑</div>
+            <div class="choice" onclick="selectChoice(4)">⬛ ⚪ ⚠️</div>
+        </div>
+        <button id="next-button" onclick="nextQuestion()">Next</button>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="screen">
+        <h2>Results</h2>
+        <p id="score"></p>
+        <button onclick="restartTest()" style="padding: 15px 30px; font-size: 18px;">Try Again</button>
+    </div>
+
+    <script>
+        let questionCount = 0;
+        let correctAnswers = 0;
+        let selectedChoice = -1;
+        let timer;
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function startTest() {
+            questionCount = 0;
+            correctAnswers = 0;
+            startTimer();
+            showScreen('test-screen');
+            updateQuestionCounter();
+        }
+
+        function startTimer() {
+            let timeLeft = 240; // 4 minutes
+            const timerDisplay = document.getElementById('timer');
+            timerDisplay.textContent = "4:00";
+
+            timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    showResults();
+                } else {
+                    timeLeft--;
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                }
+            }, 1000);
+        }
+
+        function updateQuestionCounter() {
+            document.getElementById('question-counter').textContent = `Question ${questionCount + 1} of 20`;
+        }
+
+        function selectChoice(choiceIndex) {
+            document.querySelectorAll('.choice').forEach((choice, index) => {
+                choice.classList.toggle('selected', index === choiceIndex);
+            });
+            selectedChoice = choiceIndex;
+        }
+
+        function nextQuestion() {
+            if (selectedChoice === -1) return alert("Please select an answer");
+
+            // Simulate answer checking (random correct answer)
+            if (Math.random() > 0.5) correctAnswers++;
+
+            questionCount++;
+            selectedChoice = -1;
+
+            document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('selected'));
+
+            if (questionCount >= 20) {
+                clearInterval(timer);
+                showResults();
+            } else {
+                // Simulate changing icons for the next question
+                document.querySelectorAll('.icon-grid').forEach((grid, index) => {
+                    grid.textContent = ["⬛", "⚪", "🚗", "✈️", "🚛", "⚠️", "🛑", "⬤", "◼️"][Math.floor(Math.random() * 9)];
+                });
+                updateQuestionCounter();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('score').textContent = `You answered ${correctAnswers} questions correctly.`;
+            showScreen('results-screen');
+        }
+
+        function restartTest() {
+            clearInterval(timer);
+            startTest();
+        }
+    </script>
+</body>
+</html>
